@@ -1,0 +1,8 @@
+FROM python:3.9
+
+RUN pip install avro
+
+COPY ser_des_server.py .
+COPY format_implementations/avro_.py .
+
+CMD ["python3", "ser_des_server.py"]
