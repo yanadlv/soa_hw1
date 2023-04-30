@@ -17,5 +17,5 @@ nc -u 127.0.0.1 2000
 get_result <FORMAT>
 ```
 
-#####Допустимые варианты для FORMAT:
+##### Допустимые варианты для FORMAT:
 `NATIVE`, `XML`, `JSON`, `PROTO`, `AVRO`, `YAML`, `MSGPACK` - регистр не имеет значения
