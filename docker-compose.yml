@@ -1,0 +1,103 @@
+version: '3'
+
+services:
+  proxy:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    expose:
+      - "2000/udp"
+    ports:
+      - "2000:2000/udp"
+    depends_on:
+      - native
+      - xml
+      - json
+      - proto
+      - avro
+      - yaml
+      - msgpack
+
+  native:
+    build:
+      context: .
+      dockerfile: ./format_dockerfiles/native_dockerfile
+    expose:
+      - "2001/udp"
+    ports:
+      - "2001:2001/udp"
+    environment:
+      FORMAT: "native"
+      PORT: "2001"
+
+  xml:
+    build:
+      context: .
+      dockerfile: ./format_dockerfiles/xml_dockerfile
+    expose:
+      - "2002/udp"
+    ports:
+      - "2002:2002/udp"
+    environment:
+      FORMAT: "xml"
+      PORT: "2002"
+
+  json:
+    build:
+      context: .
+      dockerfile: ./format_dockerfiles/json_dockerfile
+    expose:
+      - "2003/udp"
+    ports:
+      - "2003:2003/udp"
+    environment:
+      FORMAT: "json"
+      PORT: "2003"
+
+  proto:
+    build:
+      context: .
+      dockerfile: ./format_dockerfiles/proto_dockerfile
+    expose:
+      - "2004/udp"
+    ports:
+      - "2004:2004/udp"
+    environment:
+      FORMAT: "proto"
+      PORT: "2004"
+
+  avro:
+    build:
+      context: .
+      dockerfile: ./format_dockerfiles/avro_dockerfile
+    expose:
+      - "2005/udp"
+    ports:
+      - "2005:2005/udp"
+    environment:
+      FORMAT: "avro"
+      PORT: "2005"
+
+  yaml:
+    build:
+      context: .
+      dockerfile: ./format_dockerfiles/yaml_dockerfile
+    expose:
+      - "2006/udp"
+    ports:
+      - "2006:2006/udp"
+    environment:
+      FORMAT: "yaml"
+      PORT: "2006"
+
+  msgpack:
+    build:
+      context: .
+      dockerfile: ./format_dockerfiles/msgpack_dockerfile
+    expose:
+      - "2007/udp"
+    ports:
+      - "2007:2007/udp"
+    environment:
+      FORMAT: "msgpack"
+      PORT: "2007"
