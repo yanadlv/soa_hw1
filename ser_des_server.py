@@ -1,10 +1,10 @@
 import socket
 import os
 from sys import getsizeof
-import time
+import timeit
 
 
-HOST = "127.0.0.1"
+HOST = "0.0.0.0"
 DATA = {
     "string": "i love soa",
     "list": [-500, -50, -5, 0, 5, 50, 500],
@@ -23,45 +23,42 @@ def calculate():
     serializer = None
     deserializer = None
     if requested_format == "native":
-        from format_implementations import native_
-        serializer = native_.serialize
-        deserializer = native_.deserialize
+        from native_ import serialize, deserialize
+        serializer = serialize
+        deserializer = deserialize
     if requested_format == "xml":
-        from format_implementations import xml_
-        serializer = xml_.serialize
-        deserializer = xml_.deserialize
+        from xml_ import serialize, deserialize
+        serializer = serialize
+        deserializer = deserialize
     if requested_format == "json":
-        from format_implementations import json_
-        serializer = json_.serialize
-        deserializer = json_.deserialize
+        from json_ import serialize, deserialize
+        serializer = serialize
+        deserializer = deserialize
     if requested_format == "proto":
-        from format_implementations.proto import proto_
-        serializer = proto_.serialize
-        deserializer = proto_.deserialize
+        from proto_ import serialize, deserialize
+        serializer = serialize
+        deserializer = deserialize
     if requested_format == "avro":
-        from format_implementations import avro_
-        serializer = avro_.serialize
-        deserializer = avro_.deserialize
+        from avro_ import serialize, deserialize
+        serializer = serialize
+        deserializer = deserialize
     if requested_format == "yaml":
-        from format_implementations import yaml_
-        serializer = yaml_.serialize
-        deserializer = yaml_.deserialize
+        from yaml_ import serialize, deserialize
+        serializer = serialize
+        deserializer = deserialize
     if requested_format == "msgpack":
-        from format_implementations import msgpack_
-        serializer = msgpack_.serialize
-        deserializer = msgpack_.deserialize
+        from msgpack_ import serialize, deserialize
+        serializer = serialize
+        deserializer = deserialize
 
-    ser_begin_time = time.time()
     ser_data = serializer(DATA)
-    ser_end_time = time.time()
-    ser_total_time = ser_end_time - ser_begin_time
+    ser_total_time = timeit.timeit(lambda: serializer(DATA), number=1000) * 1000
 
-    des_begin_time = time.time()
     des_data = deserializer(ser_data)
-    des_end_time = time.time()
-    des_total_time = des_begin_time - des_end_time
+    des_total_time = timeit.timeit(lambda: deserializer(ser_data), number=1000) * 1000
 
-    return f"{requested_format.upper()} - {getsizeof(ser_data)} - {ser_total_time}ms - {des_total_time}ms".encode()
+    return f"{requested_format.upper()} - {getsizeof(ser_data)} - " \
+           f"{ser_total_time:.2f}ms - {des_total_time:.2f}ms\n\n".encode()
 
 
 def run():
@@ -70,7 +67,6 @@ def run():
 
         while True:
             request, address = s.recvfrom(2048)
-            print("process: " + request.decode() + "\n format: " + os.environ.get("FORMAT"))
             response = calculate()
             s.sendto(response, address)
 
