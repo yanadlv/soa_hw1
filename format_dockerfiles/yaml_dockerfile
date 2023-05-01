@@ -1,5 +1,7 @@
 FROM python:3.9
 
+RUN pip install pyyaml
+
 COPY ser_des_server.py .
 COPY format_implementations/yaml_.py .
 
