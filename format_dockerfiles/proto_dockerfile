@@ -3,6 +3,8 @@ FROM python:3.9
 RUN pip install protobuf
 
 COPY ser_des_server.py .
+COPY format_implementations/proto/data.proto .
+COPY format_implementations/proto/data_pb2.py .
 COPY format_implementations/proto/proto_.py .
 
 CMD ["python3", "ser_des_server.py"]
